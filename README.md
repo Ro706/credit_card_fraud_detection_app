@@ -37,10 +37,10 @@ credit-card-detect/
 
 ### Steps
 1. *Clone the Repository:*
-   sh
+   ```
    git clone https://github.com/Ro706/credit_card_fraud_detection_app.git
    cd credit_card_fraud_detection_app
-   
+   ```
 
 2. *Create a Virtual Environment & Activate it:*
    sh
