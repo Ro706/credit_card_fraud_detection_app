@@ -10,7 +10,7 @@ This project aims to detect fraudulent credit card transactions using *Graph Neu
 - *Web-based interface* for fraud visualization
 
 ## Project Structure
-
+```
 credit-card-detect/
 ├── app/
 │   ├── static/
@@ -28,7 +28,7 @@ credit-card-detect/
 ├── run.py                   # Script to run the application
 ├── requirements.txt         # Dependencies
 └── README.md                # Project documentation
-
+```
 
 ## Installation
 ### Prerequisites
