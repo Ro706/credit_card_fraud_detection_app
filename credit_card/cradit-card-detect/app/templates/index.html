@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fraud Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="card">
+        <h1>Payment Fraud Detection</h1>
+        <form method="POST" onsubmit="processForm(event)">
+            <div class="form-group">
+                <label for="payment_count">Number of payments today:</label>
+                <input type="number" id="payment_count" name="payment_count" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Transaction amount ($):</label>
+                <input type="number" id="amount" name="amount" min="0.01" step="0.01" required>
+            </div>
+            <button type="submit">Check Fraud Risk</button>
+        </form>
+    </div>
+
+    <!-- Modal Popup -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <h2>Fraud Detection Result</h2>
+            <div id="modalResult"></div>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function processForm(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                showResult(data);
+            })
+            .catch(error => {
+                showResult({error: "An error occurred"});
+            });
+        }
+
+        function showResult(data) {
+            const modal = document.getElementById('resultModal');
+            const resultDiv = document.getElementById('modalResult');
+            
+            if (data.error) {
+                resultDiv.innerHTML = `<p style="color: #dc2626">${data.error}</p>`;
+            } else {
+                const resultClass = data.result === 'Fraudulent' ? 'fraud' : 'legit';
+                resultDiv.innerHTML = `
+                    <p>Transaction: <span class="${resultClass}">${data.result}</span></p>
+                    <p>Probability: ${data.probability}</p>
+                    <p>Payment Count: ${data.payment_count}</p>
+                    <p>Amount: $${data.amount.toFixed(2)}</p>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
